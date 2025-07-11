@@ -47,4 +47,20 @@ class Login {
         )
         assertTrue(productsTitle.isDisplayed)
     }
+
+    @Then("an error message is displayed")
+    fun errorMessageIsDisplayed() {
+        try {
+            val errorMessage = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//android.widget.TextView[contains(@text, 'Username and password do not match any user in this service.')]")  // <-- Update this
+                )
+            )
+            assertTrue(errorMessage.isDisplayed)
+            println("✅ Error message displayed: '${errorMessage.text}'")
+        } catch (e: Exception) {
+            println("❌ Error message not displayed.")
+            throw AssertionError("Expected error message to be visible, but it wasn't.", e)
+        }
+    }
 }
