@@ -22,3 +22,27 @@ tasks.test {
     useTestNG()
     include("**/runner/**TestRunner*")
 }
+
+tasks.register("runWithAppium") {
+    group = "verification"
+    description = "Start Appium, run tests, stop Appium"
+
+    doLast {
+        println("🚀 Starting Appium...")
+        val process = ProcessBuilder("appium")
+            .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+            .redirectError(ProcessBuilder.Redirect.INHERIT)
+            .start()
+
+        Thread.sleep(5000) // Wait for Appium to fully start
+
+        println("🧪 Running tests...")
+        exec {
+            commandLine("gradle", "test")
+        }
+
+        println("🛑 Stopping Appium...")
+        process.destroy()
+    }
+}
+
